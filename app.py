@@ -66,33 +66,49 @@ if uploaded_files:
             dfs[key] = df
 
     # Pengkategorian dataframe
-    if 'DNR.xlsx_Anggota' in dfs:
-        df_dnr_anggota = dfs['DNR.xlsx_Anggota']
-    if 'DNR.xlsx_Suami' in dfs:
-        df_dnr_suami = dfs['DNR.xlsx_Suami']
-    if 'Data Anggota.xlsx_MdClientInfo' in dfs:
-        df_data_anggota = dfs['Data Anggota.xlsx_MdClientInfo']
-        if 'NO. KTP' in df_data_anggota.columns:
-            df_data_anggota['NO. KTP'] = "'" + df_data_anggota['NO. KTP'].astype(str)
+    df_dnr_anggota = None
+    df_dnr_suami = None
+    df_data_anggota = None
 
+    # Cek apakah sheet yang diinginkan tersedia
+if 'DNR.xlsx_Anggota' in dfs:
+    df_dnr_anggota = dfs['DNR.xlsx_Anggota']
+    st.write("Sheet Anggota dari DNR.xlsx berhasil dimuat.")
+else:
+    st.error("Sheet Anggota dari DNR.xlsx tidak ditemukan.")
 
+if 'DNR.xlsx_Suami' in dfs:
+    df_dnr_suami = dfs['DNR.xlsx_Suami']
+    st.write("Sheet Suami dari DNR.xlsx berhasil dimuat.")
+else:
+    st.error("Sheet Suami dari DNR.xlsx tidak ditemukan.")
+
+if 'Data Anggota.xlsx_MdClientInfo' in dfs:
+    df_data_anggota = dfs['Data Anggota.xlsx_MdClientInfo']
+    if 'NO. KTP' in df_data_anggota.columns:
+        df_data_anggota['NO. KTP'] = "'" + df_data_anggota['NO. KTP'].astype(str)
+    st.write("Sheet MdClientInfo dari Data Anggota.xlsx berhasil dimuat.")
+else:
+    st.error("Sheet MdClientInfo dari Data Anggota.xlsx tidak ditemukan.")
+
+if df_dnr_anggota is not None and df_data_anggota is not None:
 #----------------------DNR Anggota 
 # Tambah Kolom
-df_dnr_anggota['JENIS'] = 'ANGGOTA'
+    df_dnr_anggota['JENIS'] = 'ANGGOTA'
 
 # Ubah Nama Kolom
-rename_dict = {
+    rename_dict = {
     'No KTP': 'NO. KTP' 
 }
-df_dnr_anggota = df_dnr_anggota.rename(columns=rename_dict)
+    df_dnr_anggota = df_dnr_anggota.rename(columns=rename_dict)
 
 # Merge DNR Anggota + Data Anggota
-merge_column = 'NO. KTP'
-df_agt_merge = pd.merge(df_dnr_anggota, df_data_anggota, on=merge_column, suffixes=('_df_agt','_df_data_agt'))
-df_agt_merge = df_agt_merge.dropna(subset=['STATUS'])
+    merge_column = 'NO. KTP'
+    df_agt_merge = pd.merge(df_dnr_anggota, df_data_anggota, on=merge_column, suffixes=('_df_agt','_df_data_agt'))
+    df_agt_merge = df_agt_merge.dropna(subset=['STATUS'])
 
 # Ubah Nama Kolom Lagi
-rename_dict = {
+    rename_dict = {
     'NO. KTP_df_agt' : 'NO. KTP',
     'STATUS' : 'STATUS MENINGGAL',
     'TanggalPencairan' : 'TANGGAL CAIR',
@@ -102,35 +118,35 @@ rename_dict = {
     'TanggalAprove DNR' : 'TANGGAL ACC DNR',
 }
 
-df_agt_merge = df_agt_merge.rename(columns=rename_dict)
+    df_agt_merge = df_agt_merge.rename(columns=rename_dict)
 
-desired_order = [
+    desired_order = [
     'No', 'NO. KTP', 'ID Anggota', 'Nama Anggota', 'Center', 'Kelompok', 'Nama Suami', 'Alamat', 'Tgl. Gabung', 'STATUS MENINGGAL', 'TANGGAL CAIR', 'DISBURSE','PINJ. KE-', 'TANGGAL KEMATIAN', 'TANGGAL ACC DNR'
 ]
 
-final_agt = df_agt_merge[desired_order]
+    final_agt = df_agt_merge[desired_order]
 
-st.write("Anggota Meninggal:")
-st.write(final_agt)
+    st.write("Anggota Meninggal:")
+    st.write(final_agt)
 
 #----------------------DNR Suami 
 # Tambah Kolom
-df_dnr_suami['JENIS'] = 'SUAMI' 
+    df_dnr_suami['JENIS'] = 'SUAMI' 
 
 #Ubah Nama Kolom
-rename_dict = {
+    rename_dict = {
     'No KTP': 'NO. KTP' 
 }
-df_dnr_suami = df_dnr_suami.rename(columns=rename_dict)
+    df_dnr_suami = df_dnr_suami.rename(columns=rename_dict)
 
 # Merge DNR Suami + Data Anggota
-merge_column = 'NO. KTP'
-df_suami_merge = pd.merge(df_dnr_suami, df_data_anggota, on=merge_column, suffixes=('_df_suami','_df_data_anggota'))
+    merge_column = 'NO. KTP'
+    df_suami_merge = pd.merge(df_dnr_suami, df_data_anggota, on=merge_column, suffixes=('_df_suami','_df_data_anggota'))
 
-df_suami_merge = df_suami_merge.dropna(subset=['STATUS'])
+    df_suami_merge = df_suami_merge.dropna(subset=['STATUS'])
 
 # Ubah Nama Kolom Lagi
-rename_dict = {
+    rename_dict = {
     'NO. KTP_df_suami' : 'NO. KTP',
     'STATUS' : 'STATUS MENINGGAL',
     'TanggalPencairan' : 'TANGGAL CAIR',
@@ -140,13 +156,16 @@ rename_dict = {
     'TanggalAprove DNR' : 'TANGGAL ACC DNR',
 }
 
-df_suami_merge = df_suami_merge.rename(columns=rename_dict)
+    df_suami_merge = df_suami_merge.rename(columns=rename_dict)
 
-desired_order = [
+    desired_order = [
     'No', 'NO. KTP', 'ID Anggota', 'Nama Anggota', 'Center', 'Kelompok', 'Nama Suami', 'Alamat', 'Tgl. Gabung', 'STATUS MENINGGAL', 'TANGGAL CAIR', 'DISBURSE','PINJ. KE-', 'TANGGAL KEMATIAN', 'TANGGAL ACC DNR'
 ]
 
-final_suami = df_suami_merge[desired_order]
+    final_suami = df_suami_merge[desired_order]
 
-st.write("Suami Anggota Meninggal:")
-st.write(final_suami)
+    st.write("Suami Anggota Meninggal:")
+    st.write(final_suami)
+
+else:
+    st.error("Gagal memproses DNR Anggota karena sheet atau data tidak tersedia.")
