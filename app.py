@@ -16,7 +16,7 @@ st.markdown("""
 2. **Data Anggota.xlsx**
    - Tarik data dari MDIS di menu Laporan Ops Cabang → Detail Nasabah SRSS.
    - Kolom yang di perlukan :
-    | No | Cabang | Center | Kelompok | ID Anggota | Nama Anggota | Nama Sesuai KTP | Nama Suami | Alamat | Tgl. Gabung | NO. KTP |.
+    | No | Cabang | Center | Kelompok | ID Anggota | Nama Anggota | Nama Sesuai KTP | Nama Suami | Alamat | Tgl.  Gabung | NO. KTP |.
    - Nama sheet tidak usah diubah biarkan tetap **MdClientInfo**
 """)
 
