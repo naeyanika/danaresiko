@@ -54,6 +54,14 @@ def format_date(date):
     except:
         return date
 
+def download_multiple_sheets(final_agt, final_suami):
+    buffer = io.BytesIO()
+    with pd.ExcelWriter(buffer, engine='xlsxwriter') as writer:
+        final_agt.to_excel(writer, index=False, sheet_name='Anggota')
+        final_suami.to_excel(writer, index=False, sheet_name='Suami')
+    buffer.seek(0)
+    return buffer
+
 #-------------------------- UPLOAD FILE --------------------------#
 uploaded_files = st.file_uploader("Unggah file Excel", accept_multiple_files=True, type=["xlsx"])
 
@@ -182,6 +190,44 @@ if uploaded_files:
                 st.write(final_suami)
             else:
                 st.info("Data DNR Suami tidak tersedia. Hanya menampilkan data Anggota Meninggal.")
+                final_suami = pd.DataFrame()  # Create an empty DataFrame if there's no suami data
+
+            # Download buttons
+            st.write("### Unduh Data")
+
+            # Download button for Anggota Meninggal
+            buffer_agt = io.BytesIO()
+            with pd.ExcelWriter(buffer_agt, engine='xlsxwriter') as writer:
+                final_agt.to_excel(writer, index=False, sheet_name='Sheet1')
+            buffer_agt.seek(0)
+            st.download_button(
+                label="Unduh Anggota Meninggal.xlsx",
+                data=buffer_agt.getvalue(),
+                file_name="Anggota Meninggal.xlsx",
+                mime='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+            )
+
+            # Download button for Suami Anggota Meninggal (only if data is available)
+            if not final_suami.empty:
+                buffer_suami = io.BytesIO()
+                with pd.ExcelWriter(buffer_suami, engine='xlsxwriter') as writer:
+                    final_suami.to_excel(writer, index=False, sheet_name='Sheet1')
+                buffer_suami.seek(0)
+                st.download_button(
+                    label="Unduh Suami Anggota Meninggal.xlsx",
+                    data=buffer_suami.getvalue(),
+                    file_name="Suami Anggota Meninggal.xlsx",
+                    mime='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+                )
+
+            # Download button for combined data
+            buffer_all = download_multiple_sheets(final_agt, final_suami)
+            st.download_button(
+                label="Unduh Semua Anomali Santunan Meninggal.xlsx",
+                data=buffer_all.getvalue(),
+                file_name="Anomali Santunan Meninggal.xlsx",
+                mime='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+            )
 
         except Exception as e:
             st.error(f"Terjadi kesalahan saat memproses data: {str(e)}")
