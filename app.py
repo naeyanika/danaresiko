@@ -103,7 +103,6 @@ if uploaded_files:
             # Merge DNR Anggota + Data Anggota
             merge_column = 'NO. KTP'
             df_agt_merge = pd.merge(df_dnr_anggota, df_data_anggota, on=merge_column, suffixes=('_df_agt','_df_data_agt'))
-            df_agt_merge = df_agt_merge.dropna(subset=['STATUS'])
 
             # Ubah Nama Kolom Lagi
             rename_dict = {
@@ -141,8 +140,6 @@ if uploaded_files:
                 # Merge DNR Suami + Data Anggota
                 merge_column = 'NO. KTP'
                 df_suami_merge = pd.merge(df_dnr_suami, df_data_anggota, on=merge_column, suffixes=('_df_suami','_df_data_anggota'))
-
-                df_suami_merge = df_suami_merge.dropna(subset=['STATUS'])
 
                 # Ubah Nama Kolom Lagi
                 rename_dict = {
