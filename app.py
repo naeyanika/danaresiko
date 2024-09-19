@@ -3,7 +3,7 @@ import pandas as pd
 import numpy as np
 import io
 
-st.title('Aplikasi Pengolahan THC Simpanan')
+st.title('Aplikasi Pengolahan Dana Resiko + Data Anggota')
 st.markdown("""
 ## File yang dibutuhkan
 1. **DNR.xlsx**
