@@ -48,6 +48,12 @@ def format_kelompok(kelompok):
     except (ValueError, TypeError):
         return str(kelompok)
 
+def format_date(date):
+    try:
+        return pd.to_datetime(date).strftime('%d/%m/%Y')
+    except:
+        return date
+
 #-------------------------- UPLOAD FILE --------------------------#
 uploaded_files = st.file_uploader("Unggah file Excel", accept_multiple_files=True, type=["xlsx"])
 
@@ -113,15 +119,21 @@ if uploaded_files:
                 'Tanggal Kematian' : 'TANGGAL KEMATIAN',
                 'PinjamanKe' : 'PINJ. KE-',
                 'TanggalAprove DNR' : 'TANGGAL ACC DNR',
+                'Tgl.  Gabung' : 'Tgl. Gabung'
             }
 
             df_agt_merge = df_agt_merge.rename(columns=rename_dict)
 
             desired_order = [
-                'No', 'NO. KTP', 'ID Anggota', 'Nama Anggota', 'Center', 'Kelompok', 'Nama Suami', 'Alamat', 'Tgl.  Gabung', 'STATUS MENINGGAL', 'TANGGAL CAIR', 'DISBURSE','PINJ. KE-', 'TANGGAL KEMATIAN', 'TANGGAL ACC DNR'
+                'No', 'NO. KTP', 'ID Anggota', 'Nama Anggota', 'Center', 'Kelompok', 'Nama Suami', 'Alamat', 'Tgl. Gabung', 'STATUS MENINGGAL', 'TANGGAL CAIR', 'DISBURSE','PINJ. KE-', 'TANGGAL KEMATIAN', 'TANGGAL ACC DNR'
             ]
 
             final_agt = df_agt_merge[desired_order]
+            
+            date_columns = ['Tgl. Gabung', 'TANGGAL CAIR', 'TANGGAL KEMATIAN', 'TANGGAL ACC DNR']
+            for col in date_columns:
+                if col in final_agt.columns:
+                    final_agt[col] = final_agt[col].apply(format_date)
 
             st.write("Anggota Meninggal:")
             st.write(final_agt)
@@ -150,15 +162,21 @@ if uploaded_files:
                     'Tanggal Kematian' : 'TANGGAL KEMATIAN',
                     'PinjamanKe' : 'PINJ. KE-',
                     'TanggalAprove DNR' : 'TANGGAL ACC DNR',
+                    'Tgl.  Gabung' : 'Tgl. Gabung'
                 }
 
                 df_suami_merge = df_suami_merge.rename(columns=rename_dict)
 
                 desired_order = [
-                    'No', 'NO. KTP', 'ID Anggota', 'Nama Anggota', 'Center', 'Kelompok', 'Nama Suami', 'Alamat', 'Tgl.  Gabung', 'STATUS MENINGGAL', 'TANGGAL CAIR', 'DISBURSE','PINJ. KE-', 'TANGGAL KEMATIAN', 'TANGGAL ACC DNR'
+                    'No', 'NO. KTP', 'ID Anggota', 'Nama Anggota', 'Center', 'Kelompok', 'Nama Suami', 'Alamat', 'Tgl. Gabung', 'STATUS MENINGGAL', 'TANGGAL CAIR', 'DISBURSE','PINJ. KE-', 'TANGGAL KEMATIAN', 'TANGGAL ACC DNR'
                 ]
 
                 final_suami = df_suami_merge[desired_order]
+
+                date_columns = ['Tgl. Gabung', 'TANGGAL CAIR', 'TANGGAL KEMATIAN', 'TANGGAL ACC DNR']
+                for col in date_columns:
+                    if col in final_suami.columns:
+                        final_suami[col] = final_suami[col].apply(format_date)
 
                 st.write("Suami Anggota Meninggal:")
                 st.write(final_suami)
