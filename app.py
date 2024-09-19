@@ -107,7 +107,7 @@ if uploaded_files:
             # Ubah Nama Kolom Lagi
             rename_dict = {
                 'NO. KTP_df_agt' : 'NO. KTP',
-                'STATUS' : 'STATUS MENINGGAL',
+                'JENIS' : 'STATUS MENINGGAL',
                 'TanggalPencairan' : 'TANGGAL CAIR',
                 'Pokok' : 'DISBURSE',
                 'Tanggal Kematian' : 'TANGGAL KEMATIAN',
@@ -118,7 +118,7 @@ if uploaded_files:
             df_agt_merge = df_agt_merge.rename(columns=rename_dict)
 
             desired_order = [
-                'No', 'NO. KTP', 'ID Anggota', 'Nama Anggota', 'Center', 'Kelompok', 'Nama Suami', 'Alamat', 'Tgl. Gabung', 'STATUS MENINGGAL', 'TANGGAL CAIR', 'DISBURSE','PINJ. KE-', 'TANGGAL KEMATIAN', 'TANGGAL ACC DNR'
+                'No', 'NO. KTP', 'ID Anggota', 'Nama Anggota', 'Center', 'Kelompok', 'Nama Suami', 'Alamat', 'Tgl.  Gabung', 'STATUS MENINGGAL', 'TANGGAL CAIR', 'DISBURSE','PINJ. KE-', 'TANGGAL KEMATIAN', 'TANGGAL ACC DNR'
             ]
 
             final_agt = df_agt_merge[desired_order]
@@ -144,7 +144,7 @@ if uploaded_files:
                 # Ubah Nama Kolom Lagi
                 rename_dict = {
                     'NO. KTP_df_suami' : 'NO. KTP',
-                    'STATUS' : 'STATUS MENINGGAL',
+                    'JENIS' : 'STATUS MENINGGAL',
                     'TanggalPencairan' : 'TANGGAL CAIR',
                     'Pokok' : 'DISBURSE',
                     'Tanggal Kematian' : 'TANGGAL KEMATIAN',
@@ -155,7 +155,7 @@ if uploaded_files:
                 df_suami_merge = df_suami_merge.rename(columns=rename_dict)
 
                 desired_order = [
-                    'No', 'NO. KTP', 'ID Anggota', 'Nama Anggota', 'Center', 'Kelompok', 'Nama Suami', 'Alamat', 'Tgl. Gabung', 'STATUS MENINGGAL', 'TANGGAL CAIR', 'DISBURSE','PINJ. KE-', 'TANGGAL KEMATIAN', 'TANGGAL ACC DNR'
+                    'No', 'NO. KTP', 'ID Anggota', 'Nama Anggota', 'Center', 'Kelompok', 'Nama Suami', 'Alamat', 'Tgl.  Gabung', 'STATUS MENINGGAL', 'TANGGAL CAIR', 'DISBURSE','PINJ. KE-', 'TANGGAL KEMATIAN', 'TANGGAL ACC DNR'
                 ]
 
                 final_suami = df_suami_merge[desired_order]
